@@ -1,5 +1,6 @@
 import { ITransaction } from './ITransaction.js';
 import { ISummary } from './ISummary.js';
+import { AccountUpdate } from './utility-types.js'; 
 
 export interface IAccount {
   id: string;
@@ -10,4 +11,5 @@ export interface IAccount {
   getSummary(): ISummary;
   getSummaryString(): string;
   toString(): string;
+  update(update: AccountUpdate): void; 
 }

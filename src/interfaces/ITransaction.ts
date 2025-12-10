@@ -1,4 +1,5 @@
 import { TransactionType } from './TransactionType.js';
+import { TransactionUpdate } from './utility-types.js'; 
 
 export interface ITransaction {
   id: string;
@@ -7,4 +8,5 @@ export interface ITransaction {
   date: string;
   description: string;
   toString(): string;
+  update(update: TransactionUpdate): void; // Добавляем метод
 }
