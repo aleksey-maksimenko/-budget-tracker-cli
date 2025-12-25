@@ -5,6 +5,8 @@ import { ISummary } from '../interfaces/ISummary.js';
 import { v4 as uuidv4 } from 'uuid';
 import { formatCurrency } from 'formatCurrency';
 import { AccountUpdate } from '../interfaces/utility-types.js';
+import { writeFile } from "fs/promises";
+import { escapeCsvValue } from "../utils/escapeCsvValue.js";
 
 export class Account implements IAccount {
   private transactions: Transaction[] = [];
@@ -20,7 +22,6 @@ export class Account implements IAccount {
     if (update.id !== undefined) {
       throw new Error('Cannot change account ID');
     }
-    
     if (update.name !== undefined) this.name = update.name;
   }
 
@@ -76,7 +77,6 @@ export class Account implements IAccount {
     const formattedBalance = formatCurrency(this.balance);
     const formattedIncome = formatCurrency(this.income);
     const formattedExpenses = formatCurrency(this.expenses);
-    
     return `${this.name}: баланс ${formattedBalance} (доходы: ${formattedIncome}, расходы: ${formattedExpenses}, транзакций: ${this.transactions.length})`;
   }
 
@@ -88,13 +88,32 @@ export class Account implements IAccount {
     let output = `\n    ${this.name} (ID: ${this.id.slice(0, 8)})\n`;
     output += `Баланс: ${formattedBalance}\n`;
     output += `Доходы: ${formattedIncome} | Расходы: ${formattedExpenses}\n\n`;
-    
     if (this.transactions.length === 0) {
       return output + 'Транзакций нет!';
     }
-    
     output += 'Транзакции:\n';
     output += this.transactions.map((t) => ' - ' + t.toString()).join('\n');
     return output;
   }
+
+async exportTransactionsToCSV(filename: string): Promise<void> {
+  try {
+    const headers = ["id", "amount", "type", "date", "description"];
+
+    const rows = this.transactions.map(tx => [
+      escapeCsvValue(tx.id),
+      escapeCsvValue(tx.amount),
+      escapeCsvValue(tx.type),
+      escapeCsvValue(tx.date),
+      escapeCsvValue(tx.description ?? "")
+    ].join(","));
+    const csvContent = [
+      headers.join(","),
+      ...rows
+    ].join("\n");
+    await writeFile(filename, csvContent, { encoding: "utf-8" });
+  } catch (error) {
+    throw new Error("Не удалось выполнить экспорт транзакций в " + filename);
+  }
+}
 }

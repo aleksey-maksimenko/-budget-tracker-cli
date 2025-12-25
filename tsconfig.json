@@ -9,6 +9,8 @@
     "forceConsistentCasingInFileNames": true,
     "rootDir": "./src",
     "outDir": "./dist",
+    "types": ["node"],
+    "lib": ["ES2020"],
     "baseUrl": "./src",
     "paths": {
       "formatCurrency": ["lib/formatCurrency.js"]

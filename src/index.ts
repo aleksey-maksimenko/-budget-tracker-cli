@@ -79,7 +79,6 @@ function main() {
   } else {
     console.log('  Расходы в пределах лимита');
   }
-
   console.log(`\n Общая информация от AccountManager:`);
   console.log(`  ${manager.getSummaryString()}`);
 
@@ -103,24 +102,16 @@ function main() {
   };
   console.log(`  Минимальная информация о счете: ${accountInfo.name} (${accountInfo.id})`);
 
-  // удаление счета
-  console.log('\nУдаление счета:');
-  console.log(`  Пытаемся удалить счет с ID: ${personalAccount.id.slice(0, 8)}`);
-  const result = manager.removeAccountById(personalAccount.id);
-  if (result) {
-    console.log(`   Счет успешно удален`);
-    console.log(`  Осталось счетов: ${manager.getAccounts().length}`);
-  } else {
-    console.log(`   Счет не найден`);
-  }
-  console.log('\n Попытка изменить ID транзакции:');
+
+  (async () => {
   try {
-    if (transactions.length > 0) {
-      transactions[0].update({ id: 'new-id' } as any);
-    }
+    // экспорт транзакций
+    await personalAccount.exportTransactionsToCSV("transactions.csv");
+    console.log("Запись транзакций в transactions.csv произведена");
   } catch (error) {
-    console.log(`  Ошибка: ${(error as Error).message}`);
+    console.error("Ошибка при записи транзакций в csv-файл: ", error);
   }
+})();
 }
 
 main();
