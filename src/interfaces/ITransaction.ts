@@ -8,5 +8,5 @@ export interface ITransaction {
   date: string;
   description: string;
   toString(): string;
-  update(update: TransactionUpdate): void; // Добавляем метод
+  update(update: TransactionUpdate): void;
 }

@@ -2,6 +2,10 @@
   "name": "formatCurrency",
   "version": "1.0.0",
   "type": "module",
-  "main": "./formatCurrency.js",
-  "types": "./formatCurrency.d.ts"
+  "exports": {
+    ".": {
+      "import": "./formatCurrency.js",
+      "types": "./formatCurrency.d.ts"
+    }
+  }
 }

@@ -24,3 +24,15 @@ export type TransactionInstance = InstanceType<typeof Transaction>;
 
 // Nullable поля
 export type NullableDescription = string | null;
+
+// conditional type для получения типа поля транзакции
+export type TransactionFieldType<TField> =
+  TField extends keyof ITransaction
+    ? ITransaction[TField]
+    : never;
+
+// conditional type для проверки доходной транзакции
+export type IsIncome<T> =
+  T extends { type: "income" }
+    ? true
+    : false;
