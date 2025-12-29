@@ -27,7 +27,8 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "uuid": "^13.0.0",
-     "formatCurrency": "file:./src/lib"
+    "formatCurrency": "file:./src/lib",
+    "reflect-metadata": "^0.2.2",
+    "uuid": "^13.0.0"
   }
 }

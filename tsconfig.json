@@ -14,7 +14,9 @@
     "baseUrl": "./src",
     "paths": {
       "formatCurrency": ["lib/formatCurrency.js"]
-    }
+    },
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
   },
   "include": [
     "src/**/*",

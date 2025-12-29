@@ -7,10 +7,19 @@ import { formatCurrency } from 'formatCurrency';
 import { AccountUpdate } from '../interfaces/utility-types.js';
 import { writeFile } from "fs/promises";
 import { escapeCsvValue } from "../utils/escapeCsvValue.js";
+import { LogClass } from '../decorators/LogClass.js';
+import { LogMethod } from '../decorators/LogMethod.js';
+import { ReadOnly } from '../decorators/ReadOnly.js';
+import { Metadata } from '../decorators/Metadata.js';
 
+
+@LogClass
 export class Account implements IAccount {
+  @Metadata('description', 'Массив транзакций счета')
   private transactions: Transaction[] = [];
+  @ReadOnly
   public id: string; // убираем readonly
+  @ReadOnly
   public name: string;
 
   constructor(name: string) {
@@ -41,17 +50,17 @@ export class Account implements IAccount {
     return this.income - this.expenses;
   }
 
-  addTransaction(transaction: ITransaction): void {
-    this.transactions.push(
-      new Transaction(
-        transaction.amount,
-        transaction.type,
-        transaction.date,
-        transaction.description
-      )
-    );
+  @LogMethod
+  addTransaction(transaction: ITransaction) {
+    this.transactions.push(new Transaction(
+      transaction.amount,
+      transaction.type,
+      transaction.date,
+      transaction.description
+    ));
   }
 
+  @LogMethod
   removeTransactionById(transactionId: string): boolean {
     const index = this.transactions.findIndex((t) => t.id === transactionId);
     if (index !== -1) {
@@ -60,7 +69,7 @@ export class Account implements IAccount {
     }
     return false;
   }
-
+  @LogMethod
   getTransactions(): ITransaction[] {
     return this.transactions;
   }
